@@ -179,6 +179,7 @@ const UICtrl = (function () {
     deleteBtn: ".delete-btn",
     clearBtn: ".clear-btn",
     backBtn: ".back-btn",
+    changeBGBtn: ".change-bg-btn",
     itemNameInput: "#item-name",
     itemCaloriesInput: "#item-calories",
     totalCalories: ".total-calories",
@@ -293,6 +294,65 @@ const UICtrl = (function () {
     getSelectors: function () {
       return UISelectors;
     },
+    changeBG: function () {
+      const body = document.getElementById("body");
+      const changeBG = document.querySelector(".change-bg-btn");
+      const totalCalText = document.querySelector(".total-cal-h3");
+      const cardContent = document.querySelector(".card-content");
+      const cardTitle = document.querySelector(".card-title");
+      const itemName = document.querySelector(".item-name");
+      const itemCalories = document.querySelector(".item-calories");
+      const itemNameInput = document.querySelector(".item-name-input");
+      const itemCaloriesInput = document.querySelector(".item-calories-input");
+      const allItems = document.querySelectorAll(".collection-item");
+
+      // Checks whether the body contains a class of blue-grey
+      if (body.classList.contains("blue-grey")) {
+        // Changes to 'dark mode'
+        changeBG.innerText = "Light Mode";
+        cardTitle.classList.add("white-text");
+        itemName.classList.add("white-text");
+        itemNameInput.classList.add("white-text");
+        itemCaloriesInput.classList.add("white-text");
+        itemCalories.classList.add("white-text");
+        cardContent.classList.add("grey");
+        cardContent.classList.add("darken");
+        //TODO: When a new item is added the class is not applied. Need to find a different way of constantly checking whether there is a list item and then applying the class(could be another state)
+        allItems.forEach((item) => {
+          item.classList.add("grey");
+          item.classList.add("white-text");
+          item.classList.add("darken");
+        });
+
+        totalCalText.classList.add("white-text");
+        body.classList.add("grey");
+        body.classList.add("darken-4");
+        body.classList.remove("blue-grey");
+        // Checks whether the body contains a class of grey
+      } else if (body.classList.contains("grey")) {
+        // Changes to 'light mode'
+        changeBG.innerText = "Dark Mode";
+        itemNameInput.classList.remove("white-text");
+        itemCaloriesInput.classList.remove("white-text");
+        cardTitle.classList.remove("white-text");
+        itemName.classList.remove("white-text");
+        itemCalories.classList.remove("white-text");
+        cardContent.classList.remove("grey");
+        cardContent.classList.remove("darken");
+
+        allItems.forEach((item) => {
+          item.classList.remove("grey");
+          item.classList.remove("white-text");
+          item.classList.remove("darken");
+        });
+
+        totalCalText.classList.add("black-text");
+        totalCalText.classList.remove("white-text");
+        body.classList.add("blue-grey");
+        body.classList.remove("grey");
+        body.classList.remove("darken-4");
+      }
+    },
   };
 })();
 
@@ -339,6 +399,11 @@ const App = (function (ItemCtrl, StorageCtrl, UICtrl) {
     document
       .querySelector(UISelectors.clearBtn)
       .addEventListener("click", clearAllItemsClick);
+
+    // Change background color event
+    document
+      .querySelector(UISelectors.changeBGBtn)
+      .addEventListener("click", UICtrl.changeBG);
   };
 
   // Add item submit
